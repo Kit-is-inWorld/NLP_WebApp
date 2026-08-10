@@ -7,7 +7,7 @@ from pythainlp.corpus import thai_stopwords
 from pythainlp.util import normalize
 from pythainlp.tag import pos_tag
 
-# ----------------- Page Setup -----------------
+# ----------------- Page Config -----------------
 st.set_page_config(
     page_title="Food & Product Review NLP Analyzer",
     page_icon="🍲",
@@ -15,108 +15,159 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ----------------- CSS Custom Styling (Warm Dark-Yellow / Amber Theme) -----------------
+# ----------------- Clean & Modern CSS Styling -----------------
 st.markdown("""
 <style>
-    /* Gradient Background - Warm Amber/Deep Yellow Theme */
-    .stApp {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%) !important;
-        font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+    /* Global Typography & Background */
+    html, body, [class*="css"], .stApp {
+        font-family: 'Sarabun', sans-serif !important;
+        background-color: #fbf8f1 !important;
+        color: #2c3e50 !important;
     }
     
-    /* Sidebar Styling */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Kanit', sans-serif !important;
+        letter-spacing: 0.3px;
+    }
+
+    /* Sidebar Clean Styling */
     section[data-testid="stSidebar"] {
-        background-color: #fff9e6 !important;
-        border-right: 2px solid #e0a926 !important;
+        background-color: #f4ede0 !important;
+        border-right: 1px solid #e2d3b8 !important;
     }
-    
-    /* Main Card Container */
-    .main-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 10px 25px rgba(180, 115, 0, 0.15);
-        margin-bottom: 20px;
-        border: 1px solid rgba(224, 169, 38, 0.3);
+
+    /* Header Banner Container */
+    .app-header {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        color: white;
+        padding: 24px 32px;
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(180, 83, 9, 0.15);
+        margin-bottom: 24px;
     }
-    
-    /* Prominent Input Header */
-    .input-label-large {
-        font-size: 24px !important;
-        font-weight: 800 !important;
-        color: #7c4a03 !important;
-        margin-bottom: 8px !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    .app-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+        color: #ffffff;
     }
-    
-    /* Custom Metric Box */
-    .metric-card {
-        background: white;
+    .app-header p {
+        font-size: 15px;
+        margin: 6px 0 0 0;
+        opacity: 0.92;
+        font-weight: 300;
+    }
+
+    /* Section Card */
+    .content-box {
+        background: #ffffff;
         border-radius: 12px;
+        padding: 20px 24px;
+        border: 1px solid #ebdcc5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 20px;
+    }
+
+    /* Input Field Label */
+    .custom-input-label {
+        font-family: 'Kanit', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    /* Metrics Card Grid */
+    .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .metric-item {
+        background: #ffffff;
+        border-radius: 10px;
         padding: 16px;
-        border-left: 6px solid #e67e22;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        border: 1px solid #f0e6d6;
+        border-top: 4px solid #d97706;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
         text-align: center;
-        transition: transform 0.2s ease;
     }
-    .metric-card:hover {
-        transform: translateY(-3px);
-    }
-    .metric-title {
+    .metric-item .title {
         font-size: 13px;
         font-weight: 600;
-        color: #7f8c8d;
-        text-transform: uppercase;
-        margin-bottom: 4px;
+        color: #78716c;
+        margin-bottom: 6px;
+        font-family: 'Kanit', sans-serif;
     }
-    .metric-value {
-        font-size: 22px;
-        font-weight: 800;
-        color: #2c3e50;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    .metric-item .val {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1c1917;
+        font-family: 'Kanit', sans-serif;
     }
-    
-    /* Badges */
+
+    /* Tag Badges */
     .tag-badge {
         display: inline-block;
-        background: #fff3cd;
-        color: #856404;
-        border: 1px solid #ffeeba;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: 600;
-        margin: 3px;
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 4px 4px 4px 0;
     }
-    
-    /* Highlight Tab */
+
+    /* Tabs Clean Styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
+        background-color: transparent;
+        border-bottom: 2px solid #e7dfd1;
+        gap: 12px;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: rgba(255, 255, 255, 0.7);
+        font-family: 'Kanit', sans-serif !important;
+        font-size: 15px;
+        font-weight: 500;
+        color: #78716c;
+        padding: 10px 16px;
         border-radius: 8px 8px 0 0;
-        padding: 8px 18px;
-        font-weight: 700;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #ffffff !important;
-        color: #d35400 !important;
-        border-bottom: 3px solid #d35400 !important;
+        color: #b45309 !important;
+        font-weight: 700;
+        border-bottom: 3px solid #b45309 !important;
+    }
+
+    /* Primary Button */
+    div.stButton > button:first-child {
+        background-color: #d97706 !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        padding: 10px 24px !important;
+        font-family: 'Kanit', sans-serif !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        border: none !important;
+        box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25) !important;
+        transition: all 0.2s ease;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #b45309 !important;
+        box-shadow: 0 5px 15px rgba(180, 83, 9, 0.35) !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# ----------------- NLP Initialization -----------------
+# ----------------- NLP Core Initialization -----------------
 stopwords = set(thai_stopwords())
 
-# ----------------- NLP Pipeline Functions -----------------
 def step1_clean_text(text: str) -> dict:
-    """Regex Cleansing: ลบ URL, เบอร์โทร, อีโมจิ, แฮชแท็ก, คำลากเสียง, และ Whitespace"""
+    """Regex Cleansing: URLs, เบอร์โทร, อีโมจิ, แฮชแท็ก, การลากเสียง"""
     urls = re.findall(r'https?://\S+|www\.\S+', text)
     phones = re.findall(r'(\+66|0)[0-9]{1,2}[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}', text)
     hashtags = re.findall(r'#\S+', text)
@@ -167,33 +218,28 @@ def step3_classify_aspect(tokens: list) -> tuple:
     return best_cat, matched_kws[best_cat]
 
 def robust_ner_extractor(text: str):
-    """NER สกัดเอนทิตีอัจฉริยะ (Location, Date, Store/Brand, Price, Contact)"""
+    """NER สกัดเอนทิตีอัจฉริยะ (Location, Date, Store/Brand, Price)"""
     entities = []
     
-    # 1. Location Detection
     provinces = ["เชียงใหม่", "กรุงเทพ", "พัทยา", "ขอนแก่น", "ภูเก็ต", "อารีย์", "สยามสแควร์", "สยาม", "สุขุมวิท", "ลาดพร้าว", "หัวหิน", "ชลบุรี"]
     for prov in provinces:
         if prov in text:
             entities.append({"Entity": prov, "Type": "LOCATION (สถานที่/พิกัด)"})
             
-    # 2. Store / Brand Detection (จากคีย์เวิร์ด 'ร้าน...')
     store_match = re.findall(r'(?:ร้าน|สาขา)\s*([ก-๙a-zA-Z0-9_\s]+?)(?=\s+(?:สาขา|แถว|ที่|วันที่|อาหาร|พนักงาน|จานละ|บรรยากาศ|$))', text)
     for s in store_match:
         s_clean = s.strip()
         if len(s_clean) > 2 and s_clean not in provinces:
-            entities.append({"Entity": s_clean, "Type": "ORGANIZATION / STORE (ชื่อร้าน/แบรนด์)"})
+            entities.append({"Entity": s_clean, "Type": "ORGANIZATION (ชื่อร้าน/แบรนด์)"})
             
-    # 3. Date / Time
     date_matches = re.findall(r'(\d{1,2}\s*(?:มกราคม|กุมภาพันธ์|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม|\bม\.ค\.|\bก\.พ\.|\bมี\.ค\.))', text)
     for d in date_matches:
         entities.append({"Entity": d, "Type": "DATE_TIME (วัน/เวลา)"})
         
-    # 4. Price Detection
     price_matches = re.findall(r'(\d+[\d,]*\s*บาท)', text)
     for p in price_matches:
         entities.append({"Entity": p, "Type": "PRICE (ราคา/มูลค่า)"})
         
-    # Deduplicate entities
     unique_entities = []
     seen = set()
     for item in entities:
@@ -204,24 +250,21 @@ def robust_ner_extractor(text: str):
             
     return unique_entities
 
-# ----------------- UI Layout -----------------
+# ----------------- UI Content -----------------
 
 # Header Banner
 st.markdown("""
-<div style="background: rgba(255,255,255,0.92); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-bottom: 4px solid #e67e22;">
-    <h1 style="color: #d35400; margin: 0; font-size: 36px; font-weight: 800;">🍲 Food & Product Review NLP Analyzer</h1>
-    <p style="color: #7f8c8d; font-size: 16px; margin-top: 6px; margin-bottom: 0;">
-        ระบบอัจฉริยะวิเคราะห์ข้อความรีวิวอาหารและสินค้า สกัดประเด็นสำคัญ (Aspect) ตัดสิ่งรบกวน (Cleansing) และระบุ Entities (NER)
-    </p>
+<div class="app-header">
+    <h1>🍲 Food & Product Review NLP Analyzer</h1>
+    <p>ระบบวิเคราะห์และคัดกรองข้อมูลรีวิวภาษาไทย: ขจัด Noise, สกัดคำสำคัญ (Keywords), ระบุเอนทิตี (NER) และจัดกลุ่มประเด็น (Aspects)</p>
 </div>
 """, unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
-    st.markdown("### ⚙️ ตัวอย่างข้อมูลทดสอบ (Preset Data)")
-    
+    st.markdown("### ⚙️ ตัวเลือกข้อมูลทดสอบ")
     preset_choice = st.selectbox(
-        "เลือกตัวอย่างรีวิวเพื่อประเมินผล:",
+        "เลือกตัวอย่างรีวิวสำหรับการประเมิน:",
         [
             "ตัวอย่างที่ 1: รสชาติและคุณภาพ (สยามเบเกอรี่)",
             "ตัวอย่างที่ 2: บริการและพนักงาน (ชาบูมาสเตอร์)",
@@ -241,136 +284,122 @@ with st.sidebar:
     
     st.markdown("---")
     st.markdown("""
-    #### 📋 ขั้นตอนการประมวลผล:
-    1. **Regex Cleansing:** ลบ Noise, URLs, Phones, Emojis
-    2. **Tokenization:** ตัดคำไทย & กรอง Stopwords
-    3. **Aspect Classification:** จำแนกหัวข้อหลัก
-    4. **NER & POS Tagging:** สกัดเอนทิตีและชนิดคำ
+    **📌 NLP Pipeline Architecture:**
+    1. **Regex Cleansing:** กรองสิ่งรบกวน
+    2. **Tokenization:** ตัดคำไทย & ลบคำหยุด
+    3. **Aspect Class:** จำแนกหัวข้อรีวิว
+    4. **NER & POS:** สกัดเอนทิตี & ไวยากรณ์
     """)
 
-# Main Content Box
+# Input Card
 default_val = preset_texts[preset_choice] if preset_choice != "✍️ กำหนดข้อความเอง (Custom Input)" else "ร้าน ปิ้งย่างบุฟเฟ่ต์ สาขา อารีย์ อาหารอร่อยมาก เนื้อพรีเมียม แต่ราคาแพงไปนิด โทร 081-444-5555 #อร่อย"
 
-st.markdown('<div class="input-label-large">✍️ ป้อนข้อความรีวิวที่ต้องการวิเคราะห์:</div>', unsafe_allow_html=True)
+st.markdown('<div class="custom-input-label">✍️ ข้อความรีวิวที่ต้องการวิเคราะห์</div>', unsafe_allow_html=True)
 user_text = st.text_area(
     label="Input Box",
     label_visibility="collapsed",
     value=default_val, 
-    height=120,
-    placeholder="พิมพ์หรือวางข้อความรีวิวอาหารและสินค้าที่นี่..."
+    height=110,
+    placeholder="พิมพ์หรือวางข้อความรีวิวที่นี่..."
 )
 
-col_btn1, col_btn2 = st.columns([3, 1])
-with col_btn1:
-    run_process = st.button("🚀 ประมวลผลข้อความ (Run NLP Pipeline)", type="primary", use_container_width=True)
+btn_col1, _ = st.columns([1, 3])
+with btn_col1:
+    run_process = st.button("🚀 ประมวลผลข้อความ (Run NLP)", type="primary", use_container_width=True)
 
-if run_process:
+if run_process or user_text:
     if not user_text.strip():
         st.warning("⚠️ กรุณาใส่ข้อความรีวิวก่อนกดประมวลผล")
     else:
-        # Run Pipeline
+        # Pipeline Processing
         clean_res = step1_clean_text(user_text)
         cleaned_text = clean_res["cleaned"]
         raw_tokens, filtered_tokens = step2_normalize_and_tokenize(cleaned_text)
         aspect, matched_kws = step3_classify_aspect(filtered_tokens)
         entities_list = robust_ner_extractor(user_text)
         pos_tags = pos_tag(filtered_tokens, engine='perceptron')
-
         total_noises = sum(len(v) for v in clean_res['removed_elements'].values())
 
-        # Executive Metrics Cards
-        st.markdown("<h3 style='color: #7c4a03; margin-top: 20px;'>📊 ผลการวิเคราะห์สรุป (Executive Summary)</h3>", unsafe_allow_html=True)
-        
-        m1, m2, m3, m4 = st.columns(4)
-        with m1:
-            st.markdown(f"""
-            <div class="metric-card" style="border-left-color: #e74c3c;">
-                <div class="metric-title">หมวดหมู่หลัก (Aspect Topic)</div>
-                <div class="metric-value" title="{aspect}" style="color: #c0392b;">{aspect}</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with m2:
-            st.markdown(f"""
-            <div class="metric-card" style="border-left-color: #3498db;">
-                <div class="metric-title">คำสำคัญ (Keywords)</div>
-                <div class="metric-value" style="color: #2980b9;">{len(filtered_tokens)} คำ</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with m3:
-            st.markdown(f"""
-            <div class="metric-card" style="border-left-color: #2ecc71;">
-                <div class="metric-title">Entity ที่พบ (NER)</div>
-                <div class="metric-value" style="color: #27ae60;">{len(entities_list)} รายการ</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with m4:
-            st.markdown(f"""
-            <div class="metric-card" style="border-left-color: #f39c12;">
-                <div class="metric-title">Noise ที่ลบออก (Cleansing)</div>
-                <div class="metric-value" style="color: #d35400;">{total_noises} รายการ</div>
-            </div>
-            """, unsafe_allow_html=True)
-
         st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("### 📊 สรุปผลการวิเคราะห์ (Executive Summary)")
 
-        # Tab Sections
+        # Metric Cards Layout
+        st.markdown(f"""
+        <div class="metric-grid">
+            <div class="metric-item" style="border-top-color: #e11d48;">
+                <div class="title">หมวดหมู่หลัก (Aspect Topic)</div>
+                <div class="val" style="color: #be123c;">{aspect}</div>
+            </div>
+            <div class="metric-item" style="border-top-color: #2563eb;">
+                <div class="title">คำสำคัญ (Keywords)</div>
+                <div class="val" style="color: #1d4ed8;">{len(filtered_tokens)} คำ</div>
+            </div>
+            <div class="metric-item" style="border-top-color: #16a34a;">
+                <div class="title">Entity ที่พบ (NER)</div>
+                <div class="val" style="color: #15803d;">{len(entities_list)} รายการ</div>
+            </div>
+            <div class="metric-item" style="border-top-color: #d97706;">
+                <div class="title">Noise ที่ถูกลบ (Cleansing)</div>
+                <div class="val" style="color: #b45309;">{total_noises} จุด</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Tabs Layout
         tab1, tab2, tab3, tab4 = st.tabs([
             "🧹 1. Text Cleansing", 
             "🔤 2. Tokenization", 
-            "🏷️ 3. Topic & Keywords", 
-            "🔍 4. POS & NER"
+            "🏷️ 3. Aspect Classification", 
+            "🔍 4. NER & POS Tagging"
         ])
 
         with tab1:
-            st.markdown("#### การทำความสะอาดข้อความด้วย Regular Expressions (Regex)")
+            st.markdown("##### เปรียบเทียบข้อความก่อนและหลังทำความสะอาดด้วย Regex")
             c1, c2 = st.columns(2)
             with c1:
-                st.markdown("**ข้อความเดิม (Raw Input):**")
+                st.caption("ข้อความเดิม (Raw Input):")
                 st.info(user_text)
             with c2:
-                st.markdown("**ข้อความหลังคลีน (Cleaned Text):**")
+                st.caption("ข้อความหลังคลีน (Cleaned Text):")
                 st.success(cleaned_text if cleaned_text else "(ว่างเปล่า)")
 
-            st.markdown("##### 🗑️ ข้อมูล Noise ที่ถูกกรองออก:")
+            st.markdown("##### รายละเอียด Noise ที่ตัดออก:")
             st.json(clean_res["removed_elements"])
 
         with tab2:
-            st.markdown("#### การตัดคำและการปรับรูปคำ (Normalization & Tokenization)")
-            st.write(f"• **จำนวนคำทั้งหมดก่อนตัด Stopwords:** `{len(raw_tokens)}` คำ")
-            st.write(f"• **จำนวนคำสำคัญที่มีความหมาย (Keywords):** `{len(filtered_tokens)}` คำ")
+            st.markdown("##### ผลการปรับรูปคำและตัดคำ (Normalization & Tokenization)")
+            st.write(f"• **จำนวนคำก่อนตัดคำหยุด:** `{len(raw_tokens)}` คำ")
+            st.write(f"• **จำนวนคำสำคัญ (Keywords) หลังตัด Stopwords:** `{len(filtered_tokens)}` คำ")
             
-            st.markdown("**🏷️ คำสำคัญที่สกัดได้:**")
-            badges_html = "".join([f'<span class="tag-badge">{word}</span>' for word in filtered_tokens])
+            st.markdown("##### รายการคำสำคัญ:")
+            badges_html = "".join([f'<span class="tag-badge">{w}</span>' for w in filtered_tokens])
             st.markdown(badges_html, unsafe_allow_html=True)
 
         with tab3:
-            st.markdown("#### ผลการจัดหมวดหมู่ประเด็น (Aspect Identification)")
-            st.success(f"📌 **หมวดหมู่ที่ตรวจพบ:** {aspect}")
+            st.markdown("##### การจัดหมวดหมู่ประเด็น (Aspect-Based Topic)")
+            st.info(f"📌 **หมวดหมู่ที่จำแนกได้:** **{aspect}**")
             
             if matched_kws:
-                st.write("**คำสำคัญที่เป็นตัวชี้วัด (Trigger Keywords):**")
+                st.write("**คำสำคัญที่เป็นตัวกำหนดทิศทาง (Trigger Keywords):**")
                 for kw in matched_kws:
                     st.markdown(f"- 🎯 `{kw}`")
             else:
-                st.info("ไม่พบคีย์เวิร์ดเฉพาะเจาะจง จัดเป็นข้อความทั่วไป")
+                st.write("ไม่พบคีย์เวิร์ดบ่งชี้เฉพาะ ระบบจัดเป็นข้อความทั่วไป")
 
         with tab4:
-            st.markdown("#### การสกัด Named Entities (NER) และชนิดของคำ (POS)")
+            st.markdown("##### Named Entities (NER) และ Part-of-Speech (POS)")
             col_ner, col_pos = st.columns(2)
             
             with col_ner:
-                st.markdown("##### 📍 Named Entities ที่ตรวจพบ (NER)")
+                st.markdown("**📍 Named Entities ที่ตรวจพบ:**")
                 if entities_list:
                     df_ner = pd.DataFrame(entities_list)
                     st.dataframe(df_ner, use_container_width=True, hide_index=True)
                 else:
-                    st.warning("ไม่พบ Named Entity ในข้อความนี้")
+                    st.info("ไม่พบ Entity ในข้อความ")
                     
             with col_pos:
-                st.markdown("##### 🔠 Part-of-Speech Tags (ชนิดของคำ)")
+                st.markdown("**🔠 ชนิดของคำ (POS Tags):**")
                 if pos_tags:
                     df_pos = pd.DataFrame(pos_tags, columns=["คำศัพท์ (Word)", "POS Tag"])
                     st.dataframe(df_pos, use_container_width=True, height=260)
